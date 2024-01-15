@@ -4,6 +4,7 @@
 /Users/sariha/Desktop/sctp/group5/src/main/java/com/ntu/edu/group5/ecommerce/service/AddressService.java
 /Users/sariha/Desktop/sctp/group5/src/main/java/com/ntu/edu/group5/ecommerce/service/CustomerServiceImpl.java
 /Users/sariha/Desktop/sctp/group5/src/main/java/com/ntu/edu/group5/ecommerce/EcommerceApplication.java
+/Users/sariha/Desktop/sctp/group5/src/main/java/com/ntu/edu/group5/ecommerce/service/AddressServiceWithLoggingImpl.java
 /Users/sariha/Desktop/sctp/group5/src/main/java/com/ntu/edu/group5/ecommerce/controller/ProductController.java
 /Users/sariha/Desktop/sctp/group5/src/main/java/com/ntu/edu/group5/ecommerce/repository/CustomerRepository.java
 /Users/sariha/Desktop/sctp/group5/src/main/java/com/ntu/edu/group5/ecommerce/repository/AddressRepository.java

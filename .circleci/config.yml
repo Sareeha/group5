@@ -1,0 +1,84 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.1
+  docker: circleci/docker@2.1.4
+  heroku: circleci/heroku@2.0.0
+
+jobs:
+  build:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run: |
+          echo "Installing dependencies..."
+          npm install
+  test:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run: |
+          echo "Running tests..."
+          npm test
+  publish:
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check
+      - docker/build:
+          image: sareeha/education-space
+          tag: v1.0.2
+      - docker/push:
+          image: sareeha/education-space
+          tag: v1.0.2
+  # deploy:
+  #   docker:
+  #     - image: cimg/node:16.10
+  #   steps:
+  #     - setup_remote_docker
+  #     - checkout
+  #     - heroku/install
+  #     - run:
+  #         name: Heroku Container Push
+  #         command: |
+  #             heroku container:login
+  #             heroku container:push web -a chinhow-su-devops
+  #             heroku container:release web -a chinhow-su-devops
+  pull-and-deploy:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - setup_remote_docker
+      - heroku/install
+      - docker/pull:
+          images: sareeha/education-space:v1.0.2
+      - run:
+          name: Heroku Container Push With Image From Docker Hub
+          command: |
+              heroku container:login
+              docker tag sareeha/education-space:v1.0.2 registry.heroku.com/sariha-su-devops/web
+              # format --- docker tag <image name from docker hub> registry.heroku.com/<app-name>/web
+              docker push registry.heroku.com/sariha-su-devops/web
+              # format --- docker push registry.heroku.com/<app-name>/web
+              heroku container:release web -a sariha-su-devops
+
+workflows:
+  simple_workflow:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - publish:
+          requires:
+            - test
+      - pull-and-deploy:
+          requires:
+            - publish
